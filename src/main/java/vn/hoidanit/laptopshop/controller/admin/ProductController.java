@@ -34,6 +34,13 @@ public class ProductController {
         return "admin/product/show";
     }
 
+    @GetMapping("/admin/product/{id}")
+    public String getDetailProductPage(Model model, @PathVariable long id) {
+        Product curProd = this.productService.fetchProductById(id).get();
+        model.addAttribute("product", curProd);
+        return "admin/product/detail";
+    }
+
     // Create
     @GetMapping("/admin/product/create")
     public String getProductCreatePage(Model model) {
@@ -75,7 +82,23 @@ public class ProductController {
             return "/admin/product/update";
         }
 
-        Optional<Product> currentProd = this.productService.fetchProductById(product.getId());
+        Product currentProd = this.productService.fetchProductById(product.getId()).get();
+        if (currentProd != null) {
+            if (!file.isEmpty()) {
+                String img = this.uploadService.handleSaveUploadFile(file, "product");
+                currentProd.setImage(img);
+            }
+        }
+
+        currentProd.setName(product.getName());
+        currentProd.setPrice(product.getPrice());
+        currentProd.setQuantity(product.getQuantity());
+        currentProd.setDetailDesc(product.getDetailDesc());
+        currentProd.setShortDesc(product.getShortDesc());
+        currentProd.setFactory(product.getFactory());
+        currentProd.setTarget(product.getTarget());
+
+        this.productService.saveProduct(product);
         return "redirect:/admin/product";
     }
 
