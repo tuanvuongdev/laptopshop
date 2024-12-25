@@ -55,7 +55,7 @@ public class ProductController {
             @RequestParam("hoidanitFile") MultipartFile file) {
 
         if (newProductBindingResult.hasErrors()) {
-            return "/admin/product/create";
+            return "admin/product/create";
         }
 
         String image = this.uploadService.handleSaveUploadFile(file, "product");
@@ -79,7 +79,7 @@ public class ProductController {
             @RequestParam("hoidanitFile") MultipartFile file) {
 
         if (newProductBindingResult.hasErrors()) {
-            return "/admin/product/update";
+            return "admin/product/update";
         }
 
         Product currentProd = this.productService.fetchProductById(product.getId()).get();
