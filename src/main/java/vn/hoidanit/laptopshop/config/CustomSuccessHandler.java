@@ -44,6 +44,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        session.setAttribute("fullName", "Hỏi Dân IT");
     }
 
     @Override

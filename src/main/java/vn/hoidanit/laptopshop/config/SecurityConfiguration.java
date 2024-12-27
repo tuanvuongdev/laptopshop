@@ -50,6 +50,14 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public SpringSessionRememberMeServices rememberMeServices() {
+        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
+        // optionally customize
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
+    }
+
+    @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
@@ -77,14 +85,6 @@ public class SecurityConfiguration {
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"));
 
         return http.build();
-    }
-
-    @Bean
-    public SpringSessionRememberMeServices rememberMeServices() {
-        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-        // optionally customize
-        rememberMeServices.setAlwaysRemember(true);
-        return rememberMeServices;
     }
 
 }
