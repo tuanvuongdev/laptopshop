@@ -50,9 +50,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-<<<<<<< HEAD
-        session.setAttribute("fullName", "Hỏi Dân IT");
-=======
 
         String email = authentication.getName();
 
@@ -64,7 +61,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             session.setAttribute("id", user.getId());
             session.setAttribute("email", user.getEmail());
         }
->>>>>>> ef21854 (push code)
     }
 
     @Override
