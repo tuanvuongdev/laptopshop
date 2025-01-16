@@ -70,20 +70,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="product" items="${listCartDetail}">
+                                    <c:forEach var="cartDetail" items="${cartDetails}" varStatus="status">
                                         <tr>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center">
-                                                    <img src="/images/product/${product.image}"
+                                                    <img src="/images/product/${cartDetail.product.image}"
                                                         class="img-fluid me-5 rounded-circle"
                                                         style="width: 80px; height: 80px;" alt="">
                                                 </div>
                                             </th>
                                             <td>
-                                                <p class="mb-0 mt-4">${product.name}</p>
+                                                <p class="mb-0 mt-4">
+                                                    <a href="/product/${cartDetail.product.id}"
+                                                        target="_blank">${cartDetail.product.name}
+                                                    </a>
+                                                </p>
                                             </td>
                                             <td>
-                                                <p class="mb-0 mt-4">${product.price} đ</p>
+                                                <p class="mb-0 mt-4">
+                                                    <fmt:formatNumber type="number" value="${cartDetail.price}" /> đ
+                                                </p>
                                             </td>
                                             <td>
                                                 <div class="input-group quantity mt-4" style="width: 100px;">
@@ -95,7 +101,10 @@
                                                     </div>
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
-                                                        value="1">
+                                                        value="${cartDetail.quantity}"
+                                                        data-cart-detail-id="${cartDetail.id}"
+                                                        data-cart-detail-price="${cartDetail.price}"
+                                                        data-cart-detail-index="${status.index}">
                                                     <div class="input-group-btn">
                                                         <button
                                                             class="btn btn-sm btn-plus rounded-circle bg-light border">
@@ -105,14 +114,20 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="mb-0 mt-4">2.99 $</p>
+                                                <p class="mb-0 mt-4" data-cart-detail-id="${cartDetail.id}">
+                                                    <fmt:formatNumber type="number"
+                                                        value="${cartDetail.price * cartDetail.quantity}" /> đ
+                                                </p>
                                             </td>
                                             <td>
-                                                <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                                    <i class="fa fa-times text-danger"></i>
-                                                </button>
+                                                <form method="post" action="/delete-cart-product/${cartDetail.id}">
+                                                    <input type="hidden" name="${_csrf.parameterName}"
+                                                        value="${_csrf.token}" />
+                                                    <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                        <i class="fa fa-times text-danger"></i>
+                                                    </button>
+                                                </form>
                                             </td>
-
                                         </tr>
                                     </c:forEach>
                                 </tbody>
@@ -127,17 +142,42 @@
                                         </h1>
                                         <div class="d-flex justify-content-between mb-4">
                                             <h5 class="mb-0 me-4">Tạm tính:</h5>
-                                            <p class="mb-0">$96.00</p>
+                                            <p class="mb-0 mt-4" data-cart-total-price="${totalPrice}">
+                                                <fmt:formatNumber type="number" value="${totalPrice}" /> đ
+                                            </p>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <h5 class="mb-0 me-4">Phí vận chuyển</h5>
-                                            <p class="mb-0">$3.00</p>
+                                            <p class="mb-0">0</p>
                                         </div>
                                     </div>
                                     <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                         <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
-                                        <p class="mb-0 pe-4">$99.00</p>
+                                        <p class="mb-0 pe-4" data-cart-total-price="${totalPrice}">
+                                            <fmt:formatNumber type="number" value="${totalPrice}" /> đ
+                                        </p>
                                     </div>
+                                    <form:form action="/confirm-checkout" method="post" modelAttribute="cart">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                        <div style="display: block;">
+                                            <c:forEach var="cartDetail" items="${cart.cartDetails}" varStatus="status">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        <label>Id:</label>
+                                                        <form:input class="form-control" type="text"
+                                                            value="${cartDetail.id}"
+                                                            path="cartDetails[${status.index}].id" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Quantity:</label>
+                                                        <form:input class="form-control" type="text"
+                                                            value="${cartDetail.quantity}"
+                                                            path="cartDetails[${status.index}].quantity" />
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </form:form>
                                     <button
                                         class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
                                         type="button">Xác nhận đặt hàng</button>
