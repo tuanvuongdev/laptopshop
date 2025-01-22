@@ -125,6 +125,21 @@
     $("#videoModal").on("hide.bs.modal", function (e) {
       $("#video").attr("src", $videoSrc);
     });
+
+    //add active class to header
+    const navElement = $("#navbarCollapse");
+    const currentUrl = window.location.pathname;
+    navElement.find("a.nav-link").each(function () {
+      const link = $(this); // Get the current link in the loop
+      const href = link.attr("href"); // Get the href attribute of the link
+      console.log(href, currentUrl);
+
+      if (href === currentUrl) {
+        link.addClass("active"); // Add 'active' class if the href matches the current URL
+      } else {
+        link.removeClass("active"); // Remove 'active' class if the href does not match
+      }
+    });
   });
 
   // Product Quantity
@@ -142,7 +157,6 @@
   //     }
   //     button.parent().parent().find('input').val(newVal);
   // });
-
   $(".quantity button").on("click", function () {
     let change = 0;
 
@@ -171,13 +185,15 @@
     const price = input.attr("data-cart-detail-price");
     const id = input.attr("data-cart-detail-id");
 
-    const priceElement = $(`p[data-cart-detail-id="${id}"]`);
+    const priceElement = $(`p[data-cart-detail-id='${id}']`);
     if (priceElement) {
       const newPrice = +price * newVal;
       priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
     }
 
-    const totalPriceElement = $(`p[data-cart-total-price`);
+    //update total cart price
+    const totalPriceElement = $(`p[data-cart-total-price]`);
+
     if (totalPriceElement && totalPriceElement.length) {
       const currentTotal = totalPriceElement
         .first()
@@ -192,23 +208,29 @@
       //reset change
       change = 0;
 
+      //update
       totalPriceElement?.each(function (index, element) {
+        //update text
         $(totalPriceElement[index]).text(
           formatCurrency(newTotal.toFixed(2)) + " đ"
         );
 
+        //update data-attribute
         $(totalPriceElement[index]).attr("data-cart-total-price", newTotal);
       });
     }
   });
 
   function formatCurrency(value) {
+    // Use the 'vi-VN' locale to format the number according to Vietnamese currency format
+    // and 'VND' as the currency type for Vietnamese đồng
     const formatter = new Intl.NumberFormat("vi-VN", {
       style: "decimal",
-      minimumFractionDigits: 0,
+      minimumFractionDigits: 0, // No decimal part for whole numbers
     });
 
     let formatted = formatter.format(value);
+    // Replace dots with commas for thousands separator
     formatted = formatted.replace(/\./g, ",");
     return formatted;
   }
