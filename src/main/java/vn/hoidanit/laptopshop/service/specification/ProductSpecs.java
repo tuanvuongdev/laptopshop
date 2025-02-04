@@ -29,26 +29,14 @@ public class ProductSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(Product_.FACTORY)).value(factory);
     }
 
-    public static Specification<Product> priceInRange(
-            String minPrice1,
-            String maxPrice1,
-            String minPrice2,
-            String maxPrice2) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
-                criteriaBuilder.and(
-                        criteriaBuilder.greaterThanOrEqualTo(
-                                root.get(Product_.PRICE),
-                                minPrice1),
-                        criteriaBuilder.lessThanOrEqualTo(
-                                root.get(Product_.PRICE),
-                                maxPrice1)),
-                criteriaBuilder.and(
-                        criteriaBuilder.greaterThanOrEqualTo(
-                                root.get(Product_.PRICE),
-                                minPrice2),
-                        criteriaBuilder.lessThanOrEqualTo(
-                                root.get(Product_.PRICE),
-                                maxPrice2)));
+    public static Specification<Product> matchListTarget(List<String> target) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(Product_.TARGET)).value(target);
+    }
+
+    public static Specification<Product> matchMultiplePrice(double min, double max) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.and(
+                criteriaBuilder.ge(root.get(Product_.PRICE), min),
+                criteriaBuilder.le(root.get(Product_.PRICE), max));
     }
 
 }

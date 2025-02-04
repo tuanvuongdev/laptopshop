@@ -110,7 +110,6 @@
                                                     value="${_csrf.token}" />
                                                 <input class="form-control d-none" type="text" value="${product.id}"
                                                     name="id" />
-
                                                 <input class="form-control d-none" type="text" name="quantity"
                                                     id="cartDetails0.quantity" />
                                                 <button

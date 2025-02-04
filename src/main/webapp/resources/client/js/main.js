@@ -126,6 +126,9 @@
       $("#video").attr("src", $videoSrc);
     });
 
+    const el = document.getElementById(`cartDetails0.quantity`);
+    $(el).val(1);
+
     //add active class to header
     const navElement = $("#navbarCollapse");
     const currentUrl = window.location.pathname;
@@ -265,6 +268,11 @@
     // Add or update query parameters
     searchParams.set("page", "1");
     searchParams.set("sort", sortValue);
+
+    //reset
+    searchParams.delete("factory");
+    searchParams.delete("target");
+    searchParams.delete("price");
 
     if (factoryArr.length > 0) {
       searchParams.set("factory", factoryArr.join(","));
