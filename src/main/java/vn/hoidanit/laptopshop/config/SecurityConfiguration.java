@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                                 DispatcherType.INCLUDE)
                         .permitAll()
                         .requestMatchers("/", "/login", "/product/**", "/client/**", "/css/**", "/js/**", "/images/**",
-                                "/register")
+                                "/products/**", "/register")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // has role tự bỏ tiền tố ROLE_
                         .anyRequest().authenticated())
@@ -74,6 +74,7 @@ public class SecurityConfiguration {
                         .invalidSessionUrl("/logout?expired")
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false))
+                // .csrf(token -> token.disable())
 
                 .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
 

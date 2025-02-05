@@ -83,7 +83,7 @@ public class ProductService {
 
             switch (p) {
                 case "duoi-10-trieu":
-                    min = 0;
+                    min = 1;
                     max = 10000000;
                     break;
                 case "10-15-trieu":
@@ -102,7 +102,7 @@ public class ProductService {
                     break;
             }
 
-            if (max != 0) {
+            if (min != 0 && max != 0) {
                 Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(min, max);
                 combineSpec = combineSpec.or(rangeSpec);
             }
